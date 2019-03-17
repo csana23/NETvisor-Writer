@@ -1,0 +1,66 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://json-schema.org/draft-07/schema#",
+	"title": "Writer",
+	"description": "Writer module parameters",
+	"type": "object",
+	"properties": {
+		"topicToPublish": {
+			"description": "Writer module sends feedback to this controller topic",
+			"type": "string"
+		},
+		"topicToSubscribe": {
+			"description": "Writer module subscribes to this controller topic and receives the file paths",
+			"type": "string"
+		},
+		"vezerles": {
+			"description": "IP and port number of controller module",
+			"type": "object",
+			"properties": {
+				"ip": {
+					"type": "string"
+				},
+				"port": {
+					"type": "integer"
+				}
+			},
+			"required": ["ip", "port"]
+		},
+		"sensorhub": {
+			"description": "IP and port number of SensorHUB connection + SensorHUB topics where the writer module publishes and recieves ACK (or not...)",
+			"type": "object",
+			"properties": {
+				"ip": {
+					"type": "string"
+				},
+				"port": {
+					"type": "integer"
+				},
+				"topic_to_send": {
+					"type": "string"
+				},
+				"topic_ack": {
+					"type": "string"
+				}
+			},
+			"required": ["ip", "port", "topic_to_send"]
+		}
+	},
+	"required": ["topicToPublish", "topicToSubscribe", "vezerles", "sensorhub"]
+}
+
+# data
+{
+  "topicToPublish": "module/send/out",
+  "topicToSubscribe": "module/send/in",
+  "vezerles": {
+    "ip": "172.20.16.134",
+    "port": 1883
+  },
+  "sensorhub": {
+    "ip": "172.20.16.135",
+    "port": 1883,
+    "topic_to_send": "sensorhub/publish/ricsi",
+    "topic_ack": "sensorhub/ack"
+  }
+}
