@@ -38,9 +38,6 @@
 				},
 				"topic_to_send": {
 					"type": "string"
-				},
-				"topic_ack": {
-					"type": "string"
 				}
 			},
 			"required": ["ip", "port", "topic_to_send"]
@@ -60,7 +57,6 @@
   "sensorhub": {
     "ip": "172.20.16.135",
     "port": 1883,
-    "topic_to_send": "sensorhub/publish/ricsi",
-    "topic_ack": "sensorhub/ack"
+    "topic_to_send": "sensorhub/publish/ricsi"
   }
 }
