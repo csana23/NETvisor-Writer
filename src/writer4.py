@@ -14,7 +14,7 @@ for i in range(1, 4):
 paramDict = {}
 myclient = client.Client(client_id="ricsi_yolo", clean_session=True, userdata=None, transport="tcp")
 
-class Writer3:
+class Writer4:
 
     for i in range(len(params)):
         content_of_element = json.loads(params[i])
@@ -72,14 +72,15 @@ class Writer3:
             print("File not found!")
 
         return record
-
+    '''
     def heartbeat(self):
         topic_to_publish = str(paramDict['baseTopic']) + "out"
         publish.single(topic_to_publish, payload="writer: alive_heartbeat", qos=2, hostname=paramDict['vezerles']['ip'])
         print("heartbeat sent...")
         threading.Timer(2, self.heartbeat).start()
+    '''
 
-w = Writer3()
+w = Writer4()
 
 myclient.on_connect = w.on_connect
 myclient.on_message = w.on_message
@@ -91,5 +92,5 @@ print("topic_to_subscribe:", topic_to_subscribe)
 
 myclient.subscribe(topic_to_subscribe, qos=2)
 
-w.heartbeat()
+# w.heartbeat()
 myclient.loop_forever()
