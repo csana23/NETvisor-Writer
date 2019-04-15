@@ -1,0 +1,1 @@
+'{"aliveTopic":"module/controller/alive"}' '{"topicToPublish":"module/writer/out"}' '{"topicToSubscribe":"module/writer/in"}' '{"vezerles":{"ip":"172.20.16.134","port": 1883}}' '{"sensorhub":{"ip":"172.20.16.134","port":1883,"topic_to_send":"sensorhub/publish/ricsi","topic_ack":"sensorhub/ack"}}'

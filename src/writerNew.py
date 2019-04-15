@@ -31,7 +31,7 @@ class WriterNew:
         if rc == 0:
             print("Connected OK ", rc)
 
-            publish.single(str(paramDict['aliveTopic']), payload='{"alive":"yes"}', qos=2, hostname=paramDict['vezerles']['ip'])
+            publish.single(str(paramDict['aliveTopic']), payload='{"writer":"alive"}', qos=2, hostname=paramDict['vezerles']['ip'])
             print("alive sent...")
 
         else:
