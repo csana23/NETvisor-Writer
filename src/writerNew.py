@@ -7,7 +7,13 @@ import json
 params = []
 
 # initialize parameters
-for i in range(1, 4):
+
+# aliveTopic
+# topicToSubscribe
+# topicToPublish
+# vezerles
+# sensorhub
+for i in range(1, 6):
     params.append(sys.argv[i])
 
 paramDict = {}
@@ -25,7 +31,7 @@ class WriterNew:
         if rc == 0:
             print("Connected OK ", rc)
 
-            publish.single("controller/running", payload='{"alive":"yes"}', qos=2, hostname=paramDict['vezerles']['ip'])
+            publish.single(str(paramDict['aliveTopic']), payload='{"alive":"yes"}', qos=2, hostname=paramDict['vezerles']['ip'])
             print("alive sent...")
 
         else:
@@ -34,27 +40,40 @@ class WriterNew:
         return rc
 
     def on_message(self, client, userdata, msg):
+        # format of incoming message: {"ID":42342,"content":[24,32,53....]}
         incomingJson = str(msg.payload.decode("utf-8"))
         print("i got a message!")
         print(msg.topic + " ----- " + incomingJson)
 
+        '''
         file_path = self.get_file_path(incomingJson)
         print("filePath:", file_path)
         record = self.get_record(file_path)
         print("record:", record)
+        '''
+        # parsing json - for now, I "send" this to SensorHUB
+        parsed = self.parse_message(incomingJson)
 
         # send to shub
-        publish.single(paramDict['sensorhub']['topic_to_send'], payload=record, qos=2, hostname=paramDict['sensorhub']['ip'])
+        publish.single(paramDict['sensorhub']['topic_to_send'], payload=parsed, qos=2, hostname=paramDict['sensorhub']['ip'])
 
         # send ack to vezerles
-        msg_ack = ('{"path":"' + file_path + '","content":"ACK"}')
+        msg_ack = ('{"msg":"' + parsed + '","content":"ACK"}')
 
+        '''
         topic_to_publish = str(paramDict['baseTopic']) + "out"
         print("topic_to_publish:", topic_to_publish)
+        '''
 
-        result = myclient.publish(topic_to_publish, payload=msg_ack, qos=1)
+        result = myclient.publish(paramDict['topicToPublish'], payload=msg_ack, qos=1)
         print("result of ack: " + result)
+    
+    def parse_message(self, incomingJson):
+        parsed = json.loads(incomingJson)
 
+        return parsed
+
+    '''
     def get_file_path(self, incomingJson):
         parsed = json.loads(incomingJson)
         file_path = parsed['filePath']
@@ -71,6 +90,7 @@ class WriterNew:
             print("File not found!")
 
         return record
+    '''
 
 w = WriterNew()
 
@@ -79,7 +99,7 @@ myclient.on_message = w.on_message
 
 myclient.connect(paramDict['vezerles']['ip'], int(paramDict['vezerles']['port']))
 
-topic_to_subscribe = str(paramDict['baseTopic']) + "in"
+topic_to_subscribe = str(paramDict['topicToSubscribe'])
 print("topic_to_subscribe:", topic_to_subscribe)
 
 myclient.subscribe(topic_to_subscribe, qos=2)

@@ -21,4 +21,6 @@
 
 '{"topic_to_publish": "module/send/out"}' '{"topic_to_subscribe": "module/send/in"}' '{"vezerles": { "ip": "172.20.16.134","port": 1883}}' '{"sensorhub": {"ip": "172.20.16.135","port": 1883,"topic_to_send": "sensorhub/publish/ricsi","topic_ack": "sensorhub/ack"}}'
 
-'{"topicToPublish":"module/writer/out"}' '{"topicToSubscribe":"module/writer/in"}' '{"vezerles":{"ip":"127.0.0.1","port":"1883"}}' '{"sensorhub":{"ip":"172.20.16.134","port":"1883","topic_to_send":"sensorhub/publish/ricsi","topic_ack":"sensorhub/ack"}}'
+# writerNew
+'{"aliveTopic":"module/controller/alive"}' '{"topicToPublish":"module/writer/out"}' '{"topicToSubscribe":"module/writer/in"}' '{"vezerles":{"ip":"172.20.16.134","port": 1883}}' '{"sensorhub":{"ip":"172.20.16.134","port":1883,"topic_to_send":"sensorhub/publish/ricsi","topic_ack":"sensorhub/ack"}}'
+

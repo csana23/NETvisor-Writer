@@ -60,3 +60,20 @@
     "topic_to_send": "sensorhub/publish/ricsi"
   }
 }
+
+# requires new schema
+# data
+{
+	"aliveTopic": "module/controller/alive",
+	"topicToPublish": "module/send/out",
+	"topicToSubscribe": "module/send/in",
+	"vezerles": {
+		"ip": "172.20.16.134",
+		"port": 1883
+	},
+	"sensorhub": {
+		"ip": "172.20.16.135",
+		"port": 1883,
+		"topic_to_send": "sensorhub/publish/ricsi"
+	}
+}
