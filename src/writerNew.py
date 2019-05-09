@@ -31,7 +31,7 @@ class WriterNew:
         if rc == 0:
             print("Connected OK ", rc)
 
-            publish.single(str(paramDict['aliveTopic']), payload='{"writer":"alive"}', qos=2, hostname=paramDict['vezerles']['ip'])
+            publish.single(str(paramDict['aliveTopic']), payload='{"module":"writer"}', qos=2, hostname=paramDict['vezerles']['ip'])
             print("alive sent...")
 
         else:
@@ -40,57 +40,36 @@ class WriterNew:
         return rc
 
     def on_message(self, client, userdata, msg):
-        # format of incoming message: {"ID":42342,"content":[24,32,53....]}
+        # format of incoming message: {"id":42342,"data":[24,32,53....]}
         incomingJson = str(msg.payload.decode("utf-8"))
         print("i got a message!")
         print(msg.topic + " ----- " + incomingJson)
 
-        '''
-        file_path = self.get_file_path(incomingJson)
-        print("filePath:", file_path)
-        record = self.get_record(file_path)
-        print("record:", record)
-        '''
         # parsing json - for now, I "send" this to SensorHUB
         parsed = self.parse_message(incomingJson)
+        payload = parsed['data']
 
         # send to shub
-        publish.single(paramDict['sensorhub']['topic_to_send'], payload=parsed, qos=2, hostname=paramDict['sensorhub']['ip'])
+        publish.single(paramDict['sensorhub']['topic_to_send'], payload=payload, qos=2, hostname=paramDict['sensorhub']['ip'])
 
         # send ack to vezerles
-        msg_ack = ('{"msg":"' + parsed + '","content":"ACK"}')
+        # msg_ack = ('{"msg":"' + parsed + '","content":"ACK"}')
+        id = parsed['id']
+        msg_ack = '{"id":' + '"' + str(id) + '"}'
 
-        '''
-        topic_to_publish = str(paramDict['baseTopic']) + "out"
-        print("topic_to_publish:", topic_to_publish)
-        '''
-
-        result = myclient.publish(paramDict['topicToPublish'], payload=msg_ack, qos=1)
+        result = myclient.publish(paramDict['topicToPublish'], payload=msg_ack, qos=2)
         print("result of ack: " + result)
     
     def parse_message(self, incomingJson):
-        parsed = json.loads(incomingJson)
+        parsed = {}
+        content_of_element = json.loads(incomingJson)
+        # parsed = json.loads(incomingJson)
+        parsed.update(content_of_element)
+
+        # print parsed
+        print(parsed)
 
         return parsed
-
-    '''
-    def get_file_path(self, incomingJson):
-        parsed = json.loads(incomingJson)
-        file_path = parsed['filePath']
-
-        return file_path
-
-    def get_record(self, file_path):
-        try:
-
-            with open(file_path, 'r') as file:
-                record = file.read()
-                file.close()
-        except FileNotFoundError:
-            print("File not found!")
-
-        return record
-    '''
 
 w = WriterNew()
 
